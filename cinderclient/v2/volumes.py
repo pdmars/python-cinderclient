@@ -113,6 +113,14 @@ class Volume(base.Resource):
 
         self.manager.extend(self, volume, new_size)
 
+    def online_extend(self, volume, new_size):
+        """Online extend the size of the specified volume.
+        :param volume: The UUID of the volume to extend
+        :param new_size: The desired size to extend volume to.
+        """
+
+        self.manager.online_extend(self, volume, new_size)
+
     def migrate_volume(self, host, force_host_copy):
         """Migrate the volume to a new host."""
         self.manager.migrate_volume(self, host, force_host_copy)
@@ -356,6 +364,11 @@ class VolumeManager(base.ManagerWithFind):
 
     def extend(self, volume, new_size):
         return self._action('os-extend',
+                            base.getid(volume),
+                            {'new_size': new_size})
+
+    def online_extend(self, volume, new_size):
+        return self._action('os-online_extend',
                             base.getid(volume),
                             {'new_size': new_size})
 

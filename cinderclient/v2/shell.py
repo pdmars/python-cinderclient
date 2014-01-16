@@ -1109,6 +1109,19 @@ def do_extend(cs, args):
     cs.volumes.extend(volume, args.new_size)
 
 
+@utils.arg('volume', metavar='<volume>',
+           help='Name or ID of the volume to extend.')
+@utils.arg('new_size',
+           metavar='<new_size>',
+           type=int,
+           help='New size of volume in GB')
+@utils.service_type('volumev2')
+def do_online_extend(cs, args):
+    """Attempt to online extend the size of an existing volume."""
+    volume = utils.find_volume(cs, args.volume)
+    cs.volumes.online_extend(volume, args.new_size)
+
+
 @utils.arg('--host', metavar='<hostname>', default=None,
            help='Name of host.')
 @utils.arg('--binary', metavar='<binary>', default=None,
